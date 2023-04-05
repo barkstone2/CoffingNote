@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.CoffingNote" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:fontFamily">@font/maplestory_light</item>
+        <item name="fontFamily">@font/maplestory_light</item>
+    </style>
+</resources>
