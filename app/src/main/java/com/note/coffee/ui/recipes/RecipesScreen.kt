@@ -261,7 +261,7 @@ fun RecipeSaveScreen(
 ) {
     Log.d("RecipeSaveScreen", "start")
 
-    var newRecipe by remember { mutableStateOf(RecipeRequest()) }
+    var newRecipe by remember { mutableStateOf(recipesUiState.newRecipe) }
 
     val bean = recipesUiState.bean
     var beanName = bean?.bean?.name
