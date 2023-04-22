@@ -32,6 +32,7 @@ import com.note.coffee.ui.common.OutlinedText
 import com.note.coffee.ui.theme.Black
 import com.note.coffee.ui.theme.LightCoffee
 import com.note.coffee.ui.theme.Typography
+import com.note.coffee.ui.theme.White
 
 @Composable
 fun RecipeBeanListScreen(
@@ -109,7 +110,9 @@ fun RecipeBeanListScreen(
                                     Icon(
                                         imageVector = Icons.Default.ArrowForward,
                                         contentDescription = "",
-                                        modifier = Modifier.size(30.dp).padding(0.dp)
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .padding(0.dp)
                                     )
 
                                 }
@@ -207,6 +210,14 @@ fun RecipeListScreen(
                                     text = "드리퍼 : ${it.dripper?.name ?: ""}",
                                     style = Typography.bodySmall,
                                 )
+                                Text(
+                                    text = "물 : ${it.water?.name ?: ""}",
+                                    style = Typography.bodySmall,
+                                )
+                                Text(
+                                    text = "비율 : [${it.recipe.beenRatio} : ${it.recipe.waterRatio}]",
+                                    style = Typography.bodySmall,
+                                )
                                 if (!it.recipe.comment.isNullOrEmpty()) {
                                     Text(
                                         text = "- \"${it.recipe.comment}\"",
@@ -262,6 +273,7 @@ fun RecipeSaveScreen(
     val beans = recipesUiState.beans
     val handMills = recipesUiState.handMills
     val drippers = recipesUiState.drippers
+    val waters = recipesUiState.waters
 
     val focusManager = LocalFocusManager.current
 
@@ -358,6 +370,60 @@ fun RecipeSaveScreen(
                             value = { it.name ?: "" }
                         )
 
+                        OutlinedSelectBox(
+                            items = waters,
+                            label = { Text("물") },
+                            onClick = { newRecipe = newRecipe.copy(water = it) },
+                            value = { it.name ?: "" }
+                        )
+
+                        Row() {
+                            OutlinedTextField(
+                                value = newRecipe.beenRatio?.toString() ?: "",
+                                onValueChange = {
+                                    if (it.isEmpty() || it.toFloatOrNull() != null) {
+                                        newRecipe = newRecipe.copy(beenRatio = it.toFloat())
+                                    }
+                                },
+                                label = { Text("원두 비율") },
+                                modifier = Modifier
+                                    .fillMaxWidth(0.5f)
+                                    .padding(end = 5.dp),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        focusManager.clearFocus()
+                                    }
+                                )
+                            )
+
+                            OutlinedTextField(
+                                value = newRecipe.waterRatio?.toString() ?: "",
+                                onValueChange = {
+                                    if (it.isEmpty() || it.toFloatOrNull() != null) {
+                                        newRecipe = newRecipe.copy(waterRatio = it.toFloat())
+                                    }
+                                },
+                                label = { Text("물 비율") },
+                                modifier = Modifier
+                                    .fillMaxWidth(1f)
+                                    .padding(start = 5.dp),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        focusManager.clearFocus()
+                                    }
+                                )
+                            )
+                        }
+
+
                         OutlinedTextField(
                             value = newRecipe.comment,
                             onValueChange = { newRecipe = newRecipe.copy(comment = it) },
@@ -428,6 +494,7 @@ fun RecipeSaveScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailScreen(
     recipesUiState: RecipesUiState,
@@ -444,6 +511,9 @@ fun RecipeDetailScreen(
     val origin = recipesUiState.recipe?.bean?.origin
     val handMill = recipesUiState.recipe?.handMill
     val dripper = recipesUiState.recipe?.dripper
+    val water = recipesUiState.recipe?.water
+
+    val focusManager = LocalFocusManager.current
 
     ConstraintLayout(
         modifier = Modifier
@@ -521,6 +591,85 @@ fun RecipeDetailScreen(
                     )
                 }
 
+                OutlinedText(
+                    label = "물",
+                ) {
+                    Text(
+                        text = water?.name ?: "",
+                        style = Typography.bodySmall,
+                    )
+                }
+
+                OutlinedText(
+                    label = "비율",
+                ) {
+                    Text(
+                        text = "${recipe?.beenRatio} : ${recipe?.waterRatio}",
+                        style = Typography.bodySmall,
+                    )
+                }
+
+                Divider(
+                    modifier = Modifier.padding(top = 20.dp, bottom = 20.dp),
+                    thickness = 0.dp,
+                    color = White
+                )
+
+                Row {
+                    val inputBeen = remember { mutableStateOf(0.0F) }
+                    OutlinedTextField(
+                        value = "${inputBeen.value}",
+                        onValueChange = {
+                            if(it.isEmpty() || it.toFloatOrNull() != null) {
+                                inputBeen.value = it.toFloat()
+                            }
+                        },
+                        label = { Text("원두 투입량") },
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(end = 5.dp),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        ),
+                        textStyle = Typography.bodySmall,
+                        trailingIcon = {
+                            Text(
+                                text = "g",
+                                style = Typography.bodySmall,
+                            )
+                        }
+                    )
+
+                    OutlinedTextField(
+                        value = "${recipe?.waterRatio
+                            ?.times(inputBeen.value)
+                            ?.div(recipe.beenRatio ?: 1.0F) ?: ""}",
+                        onValueChange = {
+                            if(it.isEmpty() || it.toFloatOrNull() != null) {
+                                inputBeen.value = it.toFloat()
+                            }
+                        },
+                        label = { Text("물 투입량") },
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .padding(start = 5.dp),
+                        readOnly = true,
+                        textStyle = Typography.bodySmall,
+                        trailingIcon = {
+                            Text(
+                                text = "g",
+                                style = Typography.bodySmall,
+                            )
+                        }
+                    )
+                }
+
                 if(!recipe?.comment.isNullOrEmpty()) {
                     OutlinedText(
                         label = "메모",
@@ -586,11 +735,13 @@ fun RecipeUpdateScreen(
     val beans = recipesUiState.beans
     val handMills = recipesUiState.handMills
     val drippers = recipesUiState.drippers
+    val waters = recipesUiState.waters
 
     val bean = recipesUiState.recipe?.bean?.bean
     val roastery = recipesUiState.recipe?.bean?.roastery
     val handMill = recipesUiState.recipe?.handMill
     val dripper = recipesUiState.recipe?.dripper
+    val water = recipesUiState.recipe?.water
 
     var beanName = bean?.name
     if (!roastery?.name.isNullOrEmpty()) {
@@ -686,6 +837,60 @@ fun RecipeUpdateScreen(
                     onClick = { newRecipe = newRecipe.copy(dripper = it) },
                     value = { it.name ?: "" }
                 )
+
+                OutlinedSelectBox(
+                    items = waters,
+                    currentValue = water?.name,
+                    label = { Text("물") },
+                    onClick = { newRecipe = newRecipe.copy(water = it) },
+                    value = { it.name ?: "" }
+                )
+
+                Row {
+                    OutlinedTextField(
+                        value = newRecipe.beenRatio?.toString() ?: "",
+                        onValueChange = {
+                            if (it.isEmpty() || it.toFloatOrNull() != null) {
+                                newRecipe = newRecipe.copy(beenRatio = it.toFloat())
+                            }
+                        },
+                        label = { Text("원두 비율") },
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .padding(end = 5.dp),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        )
+                    )
+
+                    OutlinedTextField(
+                        value = newRecipe.waterRatio?.toString() ?: "",
+                        onValueChange = {
+                            if (it.isEmpty() || it.toFloatOrNull() != null) {
+                                newRecipe = newRecipe.copy(waterRatio = it.toFloat())
+                            }
+                        },
+                        label = { Text("물 비율") },
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .padding(start = 5.dp),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        )
+                    )
+                }
 
                 OutlinedTextField(
                     value = newRecipe.comment,
