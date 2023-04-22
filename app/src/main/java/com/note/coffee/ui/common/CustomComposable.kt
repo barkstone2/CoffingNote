@@ -86,12 +86,15 @@ fun <T> OutlinedSelectBox(
 @Composable
 fun OutlinedText(
     label: String,
+    outerPadding: PaddingValues? = null,
+    innerPadding: PaddingValues? = null,
     value: @Composable () -> Unit,
 ) {
 
     Box(
         modifier = Modifier
             .padding(top = 8.dp)
+            .padding(outerPadding ?: PaddingValues())
     ) {
         // label
         Text(
@@ -115,7 +118,8 @@ fun OutlinedText(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .border(BorderStroke(1.dp, Black), RoundedCornerShape(4.dp))
-                .padding(vertical = 16.dp, horizontal = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp)
+                .padding(innerPadding ?: PaddingValues())
         ) {
             value()
         }
