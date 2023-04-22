@@ -31,6 +31,11 @@ import com.note.coffee.ui.origin.*
 import com.note.coffee.ui.recipes.*
 import com.note.coffee.ui.roastery.*
 import com.note.coffee.ui.theme.*
+import com.note.coffee.ui.water.WaterDetailScreen
+import com.note.coffee.ui.water.WaterListScreen
+import com.note.coffee.ui.water.WaterSaveScreen
+import com.note.coffee.ui.water.WaterUpdateScreen
+import com.note.coffee.ui.water.WaterViewModel
 
 
 enum class CoffingNoteScreen(
@@ -122,6 +127,18 @@ enum class CoffingNoteScreen(
         title = R.string.roastery_update, hasTopBar = true, canNavigateBack = true, hasNavBar = false
     ),
 
+    WaterList(
+        title = R.string.water_list, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+    ),
+    WaterSave(
+        title = R.string.water_save, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+    ),
+    WaterDetail(
+        title = R.string.water_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+    ),
+    WaterUpdate(
+        title = R.string.water_update, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+    ),
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -208,6 +225,18 @@ fun CoffingNoteAppBar(
                                             )
                                         },
                                     )
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            onClickNavMenu(CoffingNoteScreen.WaterList)
+                                            expanded = false
+                                        },
+                                        text = {
+                                            Text(
+                                                text = "물 관리",
+                                                style = Typography.labelMedium
+                                            )
+                                        },
+                                    )
                                 }
                             }
                         }
@@ -284,6 +313,7 @@ fun CoffingNoteApp(
     recipesViewModel: RecipesViewModel,
     originViewModel: OriginViewModel,
     roasteryViewModel: RoasteryViewModel,
+    waterViewModel: WaterViewModel,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -305,6 +335,8 @@ fun CoffingNoteApp(
     val recipesUiState by recipesViewModel.uiState.collectAsStateWithLifecycle()
     val originUiState by originViewModel.uiState.collectAsStateWithLifecycle()
     val roasteryUiState by roasteryViewModel.uiState.collectAsStateWithLifecycle()
+    val waterUiState by waterViewModel.uiState.collectAsStateWithLifecycle()
+
 
     Scaffold(
         topBar = {
@@ -632,6 +664,56 @@ fun CoffingNoteApp(
                     onNavigateBack = { navController.popBackStack() },
                 )
             }
+
+
+            /** Water Screen **/
+            composable(route = CoffingNoteScreen.WaterList.name) {
+                WaterListScreen(
+                    waterUiState = waterUiState,
+                    onNavigateToSave = { navController.navigate(CoffingNoteScreen.WaterSave.name) },
+                    onNavigateToDetail = {
+                        waterViewModel.getWater(it)
+                        navController.navigate(CoffingNoteScreen.WaterDetail.name)
+                    }
+                )
+            }
+            composable(route = CoffingNoteScreen.WaterSave.name) {
+                WaterSaveScreen(
+                    onClickRegistration = {
+                        waterViewModel.saveWater(it.mapToEntity())
+                        navController.navigate(CoffingNoteScreen.WaterList.name) {
+                            popUpTo(CoffingNoteScreen.WaterList.name) { inclusive = true }
+                        }
+                    },
+                    onNavigateBack = { navController.popBackStack() },
+                )
+            }
+            composable(route = CoffingNoteScreen.WaterDetail.name) {
+                WaterDetailScreen(
+                    waterUiState = waterUiState,
+                    onNavigateToUpdate = { navController.navigate(CoffingNoteScreen.WaterUpdate.name) },
+                    onClickDelete = {
+                        waterViewModel.deleteWater(it)
+                        navController.navigate(CoffingNoteScreen.WaterList.name) {
+                            popUpTo(CoffingNoteScreen.WaterList.name) { inclusive = true }
+                        }
+                    },
+                    onNavigateBack = { navController.popBackStack() },
+                )
+            }
+            composable(route = CoffingNoteScreen.WaterUpdate.name) {
+                WaterUpdateScreen(
+                    waterUiState = waterUiState,
+                    onClickUpdate = {
+                        waterViewModel.updateWater(it.mapToEntity())
+                        navController.navigate(CoffingNoteScreen.WaterList.name) {
+                            popUpTo(CoffingNoteScreen.WaterList.name) { inclusive = true }
+                        }
+                    },
+                    onNavigateBack = { navController.popBackStack() },
+                )
+            }
+
 
         }
     }
