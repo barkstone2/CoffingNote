@@ -215,7 +215,7 @@ fun RecipeListScreen(
                                     style = Typography.bodySmall,
                                 )
                                 Text(
-                                    text = "비율 : [${it.recipe.beenRatio ?: ""} : ${it.recipe.waterRatio ?: ""}]",
+                                    text = "비율 : [${it.recipe.getRatioText()}]",
                                     style = Typography.bodySmall,
                                 )
                                 if (!it.recipe.comment.isNullOrEmpty()) {
@@ -377,12 +377,15 @@ fun RecipeSaveScreen(
                             value = { it.name ?: "" }
                         )
 
+                        val beenRatio = remember { mutableStateOf("") }
+
                         Row() {
                             OutlinedTextField(
-                                value = newRecipe.beenRatio?.toString() ?: "",
+                                value = beenRatio.value,
                                 onValueChange = {
                                     if (it.isEmpty() || it.toFloatOrNull() != null) {
-                                        newRecipe = newRecipe.copy(beenRatio = it.toFloat())
+                                        newRecipe = newRecipe.copy(beenRatio = it.toFloatOrNull())
+                                        beenRatio.value = it
                                     }
                                 },
                                 label = { Text("원두 비율") },
@@ -400,11 +403,14 @@ fun RecipeSaveScreen(
                                 )
                             )
 
+                            val waterRatio = remember { mutableStateOf("") }
+
                             OutlinedTextField(
-                                value = newRecipe.waterRatio?.toString() ?: "",
+                                value = waterRatio.value,
                                 onValueChange = {
                                     if (it.isEmpty() || it.toFloatOrNull() != null) {
-                                        newRecipe = newRecipe.copy(waterRatio = it.toFloat())
+                                        newRecipe = newRecipe.copy(waterRatio = it.toFloatOrNull())
+                                        waterRatio.value = it
                                     }
                                 },
                                 label = { Text("물 비율") },
@@ -604,7 +610,7 @@ fun RecipeDetailScreen(
                     label = "비율",
                 ) {
                     Text(
-                        text = "${recipe?.beenRatio ?: ""} : ${recipe?.waterRatio ?: ""}",
+                        text = "${recipe?.getRatioText()}",
                         style = Typography.bodySmall,
                     )
                 }
@@ -627,12 +633,12 @@ fun RecipeDetailScreen(
                 )
 
                 Row {
-                    val inputBeen = remember { mutableStateOf(0.0F) }
+                    val inputBeen = remember { mutableStateOf("0") }
                     OutlinedTextField(
-                        value = "${inputBeen.value}",
+                        value = inputBeen.value,
                         onValueChange = {
                             if(it.isEmpty() || it.toFloatOrNull() != null) {
-                                inputBeen.value = it.toFloat()
+                                inputBeen.value = it
                             }
                         },
                         label = { Text("원두 투입량") },
@@ -657,15 +663,13 @@ fun RecipeDetailScreen(
                         }
                     )
 
+                    val waterInput = recipe?.waterRatio
+                        ?.times(inputBeen.value.toFloatOrNull() ?: 0F)
+                        ?.div(recipe.beenRatio ?: 0F) ?: 0F
+
                     OutlinedTextField(
-                        value = "${recipe?.waterRatio
-                            ?.times(inputBeen.value)
-                            ?.div(recipe.beenRatio ?: 1.0F) ?: ""}",
-                        onValueChange = {
-                            if(it.isEmpty() || it.toFloatOrNull() != null) {
-                                inputBeen.value = it.toFloat()
-                            }
-                        },
+                        value = "${if(waterInput % 1 == 0F) waterInput.toInt() else String.format("%.1f", waterInput)}",
+                        onValueChange = {},
                         label = { Text("물 투입량") },
                         modifier = Modifier
                             .fillMaxWidth(1f)
@@ -847,12 +851,15 @@ fun RecipeUpdateScreen(
                     value = { it.name ?: "" }
                 )
 
+                val beenRatio = remember { mutableStateOf(newRecipe.beenRatio?.toString() ?: "") }
+
                 Row {
                     OutlinedTextField(
-                        value = newRecipe.beenRatio?.toString() ?: "",
+                        value = beenRatio.value,
                         onValueChange = {
                             if (it.isEmpty() || it.toFloatOrNull() != null) {
-                                newRecipe = newRecipe.copy(beenRatio = it.toFloat())
+                                newRecipe = newRecipe.copy(beenRatio = it.toFloatOrNull())
+                                beenRatio.value = it
                             }
                         },
                         label = { Text("원두 비율") },
@@ -870,11 +877,14 @@ fun RecipeUpdateScreen(
                         )
                     )
 
+                    val waterRatio = remember { mutableStateOf(newRecipe.waterRatio?.toString() ?: "") }
+
                     OutlinedTextField(
-                        value = newRecipe.waterRatio?.toString() ?: "",
+                        value = waterRatio.value,
                         onValueChange = {
                             if (it.isEmpty() || it.toFloatOrNull() != null) {
-                                newRecipe = newRecipe.copy(waterRatio = it.toFloat())
+                                newRecipe = newRecipe.copy(waterRatio = it.toFloatOrNull())
+                                waterRatio.value = it
                             }
                         },
                         label = { Text("물 비율") },

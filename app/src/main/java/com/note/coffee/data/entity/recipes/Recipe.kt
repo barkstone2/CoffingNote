@@ -15,4 +15,20 @@ data class Recipe(
     val waterRatio: Float?,
     val beenRatio: Float?,
     val comment: String? = null
-)
+) {
+   fun getRatioText(): String {
+       return buildString {
+           append(
+               if(beenRatio?.rem(1) == 0F) {
+                   beenRatio.toInt()
+               } else beenRatio ?: ""
+           )
+           append(" : ")
+           append(
+               if(waterRatio?.rem(1) == 0F) {
+                   waterRatio.toInt()
+               } else waterRatio ?: ""
+           )
+       }
+   }
+}
