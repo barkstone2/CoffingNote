@@ -215,7 +215,7 @@ fun RecipeListScreen(
                                     style = Typography.bodySmall,
                                 )
                                 Text(
-                                    text = "비율 : [${it.recipe.beenRatio} : ${it.recipe.waterRatio}]",
+                                    text = "비율 : [${it.recipe.beenRatio ?: ""} : ${it.recipe.waterRatio ?: ""}]",
                                     style = Typography.bodySmall,
                                 )
                                 if (!it.recipe.comment.isNullOrEmpty()) {
@@ -604,9 +604,20 @@ fun RecipeDetailScreen(
                     label = "비율",
                 ) {
                     Text(
-                        text = "${recipe?.beenRatio} : ${recipe?.waterRatio}",
+                        text = "${recipe?.beenRatio ?: ""} : ${recipe?.waterRatio ?: ""}",
                         style = Typography.bodySmall,
                     )
+                }
+
+                if(!recipe?.comment.isNullOrEmpty()) {
+                    OutlinedText(
+                        label = "메모",
+                    ) {
+                        Text(
+                            text = recipe?.comment ?: "",
+                            style = Typography.bodySmall,
+                        )
+                    }
                 }
 
                 Divider(
@@ -670,16 +681,6 @@ fun RecipeDetailScreen(
                     )
                 }
 
-                if(!recipe?.comment.isNullOrEmpty()) {
-                    OutlinedText(
-                        label = "메모",
-                    ) {
-                        Text(
-                            text = recipe?.comment ?: "",
-                            style = Typography.bodySmall,
-                        )
-                    }
-                }
             }
         }
 
