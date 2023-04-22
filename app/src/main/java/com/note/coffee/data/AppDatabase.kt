@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
         Recipe::class,
         Water::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(value = [StringListConverter::class, RoastDegreeConverter::class])
@@ -59,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase = INSTANCE ?: Room
             .databaseBuilder(context, AppDatabase::class.java, "coffing_note.db")
-            .addMigrations(migrate_1_2)
+            .addMigrations(migrate_1_2, migrate_2_3)
             .addCallback(object : Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
@@ -85,6 +85,22 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE roastery ADD COLUMN `comment` TEXT")
             }
         }
+
+        private val migrate_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE IF NOT EXISTS `water` (
+                        `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        `name` TEXT,
+                        `comment` TEXT
+                    )
+                """.trimIndent())
+                database.execSQL("ALTER TABLE recipe ADD COLUMN `waterId` INTEGER")
+                database.execSQL("ALTER TABLE recipe ADD COLUMN `waterRatio` REAL")
+                database.execSQL("ALTER TABLE recipe ADD COLUMN `beenRatio` REAL")
+            }
+        }
+
 
     }
 
