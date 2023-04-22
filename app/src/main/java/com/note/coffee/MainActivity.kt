@@ -59,11 +59,7 @@ class MainActivity : ComponentActivity() {
 
                 application.showAdIfAvailable(
                     this@MainActivity,
-                    object : MainApplication.OnShowAdCompleteListener {
-                        override fun onShowAdComplete() {
-                            adShowCompleted.value = true
-                        }
-                    }
+                    { adShowCompleted.value = true }
                 ) { adShowCompleted.value = true }
             }
 
