@@ -7,6 +7,7 @@ import com.note.coffee.data.entity.handmills.HandMill
 import com.note.coffee.data.repository.handmills.HandMillRepository
 import com.note.coffee.ui.SharedData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,7 @@ class HandMillsViewModel @Inject constructor(
     }
 
     fun saveHandMill(handMill: HandMill) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             handMillRepository.insert(handMill)
             sharedData.loadHandMills()
         }
@@ -36,7 +37,7 @@ class HandMillsViewModel @Inject constructor(
 
 
     fun deleteHandMill(handMill: HandMill) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             handMillRepository.delete(handMill)
             sharedData.loadHandMills()
             sharedData.loadRecipes()
@@ -44,7 +45,7 @@ class HandMillsViewModel @Inject constructor(
     }
 
     fun getHandMill(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val handMill = handMillRepository.get(id)
             _uiState.update {
                 it.copy(handMill = handMill)
@@ -53,7 +54,7 @@ class HandMillsViewModel @Inject constructor(
     }
 
     fun updateHandMill(handMill: HandMill) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             handMillRepository.update(handMill)
             sharedData.loadHandMills()
             sharedData.loadRecipes()

@@ -31,21 +31,21 @@ class RecipesViewModel @Inject constructor(
     }
 
     fun saveRecipe(recipe: Recipe) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.insert(recipe)
             sharedData.loadRecipes()
         }
     }
 
     fun deleteRecipe(recipe: Recipe) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.delete(recipe)
             sharedData.loadRecipes()
         }
     }
 
     fun getRecipe(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val recipe = recipeRepository.get(id)
             _uiState.update {
                 it.copy(recipe = recipe)
@@ -54,7 +54,7 @@ class RecipesViewModel @Inject constructor(
     }
 
     fun updateRecipe(recipe: Recipe) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.update(recipe)
             sharedData.loadRecipes()
         }
@@ -71,7 +71,7 @@ class RecipesViewModel @Inject constructor(
             it.copy(errorMessage = errorMessage)
         }
 
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             delay(2000)
             messageDismiss()
         }

@@ -3,7 +3,6 @@ package com.note.coffee.ui
 import android.util.Log
 import com.note.coffee.data.dto.beans.BeanResponse
 import com.note.coffee.data.dto.recipes.RecipeResponse
-import com.note.coffee.data.entity.beans.Bean
 import com.note.coffee.data.entity.beans.Origin
 import com.note.coffee.data.entity.beans.Roastery
 import com.note.coffee.data.entity.drippers.Dripper
@@ -58,37 +57,45 @@ class SharedData @Inject constructor(
     val waters: StateFlow<List<Water>> = _waters.asStateFlow()
 
     suspend fun loadBeans() {
-        _beans.value = beanRepository.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            _beans.value = beanRepository.getAll()
+        }
     }
 
     suspend fun loadOrigins() {
-        _origins.value = originRepository.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            _origins.value = originRepository.getAll()
+        }
     }
 
     suspend fun loadRoasteries() {
-        _roasteries.value = roasteryRepository.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            _roasteries.value = roasteryRepository.getAll()
+        }
     }
 
     suspend fun loadHandMills() {
-        _handMills.value = handMillRepository.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            _handMills.value = handMillRepository.getAll()
+        }
     }
 
     suspend fun loadDrippers() {
-        _drippers.value = dripperRepository.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            _drippers.value = dripperRepository.getAll()
+        }
     }
 
     suspend fun loadRecipes() {
-        _recipes.value = recipeRepository.getAll()
+        CoroutineScope(Dispatchers.IO).launch {
+            _recipes.value = recipeRepository.getAll()
+        }
     }
 
     suspend fun loadWaters() {
-        _waters.value = waterRepository.getAll()
-    }
-
-    suspend fun deleteBean(bean: Bean) {
-        recipeRepository.deleteAllByBeanId(bean.id)
-        loadBeans()
-        loadRecipes()
+        CoroutineScope(Dispatchers.IO).launch {
+            _waters.value = waterRepository.getAll()
+        }
     }
 
     init {

@@ -7,6 +7,7 @@ import com.note.coffee.data.entity.drippers.Dripper
 import com.note.coffee.data.repository.drippers.DripperRepository
 import com.note.coffee.ui.SharedData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,14 +30,14 @@ class DrippersViewModel @Inject constructor(
     }
 
     fun saveDripper(dripper: Dripper) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             dripperRepository.insert(dripper)
             sharedData.loadDrippers()
         }
     }
 
     fun deleteDripper(dripper: Dripper) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             dripperRepository.delete(dripper)
             sharedData.loadDrippers()
             sharedData.loadRecipes()
@@ -44,7 +45,7 @@ class DrippersViewModel @Inject constructor(
     }
 
     fun getDripper(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val dripper = dripperRepository.get(id)
             _uiState.update {
                 it.copy(dripper = dripper)
@@ -53,7 +54,7 @@ class DrippersViewModel @Inject constructor(
     }
 
     fun updateDripper(dripper: Dripper) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             dripperRepository.update(dripper)
             sharedData.loadDrippers()
             sharedData.loadRecipes()

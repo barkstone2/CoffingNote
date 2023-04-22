@@ -7,6 +7,7 @@ import com.note.coffee.data.entity.beans.Roastery
 import com.note.coffee.data.repository.beans.RoasteryRepository
 import com.note.coffee.ui.SharedData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,7 @@ class RoasteryViewModel @Inject constructor(
     }
 
     fun saveRoastery(roastery: Roastery) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             roasteryRepository.insert(roastery)
             sharedData.loadRoasteries()
         }
@@ -36,7 +37,7 @@ class RoasteryViewModel @Inject constructor(
 
 
     fun deleteRoastery(roastery: Roastery) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             roasteryRepository.delete(roastery)
             sharedData.loadRoasteries()
             sharedData.loadBeans()
@@ -45,7 +46,7 @@ class RoasteryViewModel @Inject constructor(
     }
 
     fun getRoastery(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val roastery = roasteryRepository.get(id)
             _uiState.update {
                 it.copy(roastery = roastery)
@@ -54,7 +55,7 @@ class RoasteryViewModel @Inject constructor(
     }
 
     fun updateRoastery(roastery: Roastery) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             roasteryRepository.update(roastery)
             sharedData.loadRoasteries()
             sharedData.loadBeans()

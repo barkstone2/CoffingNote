@@ -7,6 +7,7 @@ import com.note.coffee.data.entity.beans.Origin
 import com.note.coffee.data.repository.beans.OriginRepository
 import com.note.coffee.ui.SharedData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,14 +29,14 @@ class OriginViewModel @Inject constructor(
     }
 
     fun saveOrigin(origin: Origin) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             originRepository.insert(origin)
             sharedData.loadOrigins()
         }
     }
 
     fun deleteOrigin(origin: Origin) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             originRepository.delete(origin)
             sharedData.loadOrigins()
             sharedData.loadBeans()
@@ -44,7 +45,7 @@ class OriginViewModel @Inject constructor(
     }
 
     fun getOrigin(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val origin = originRepository.get(id)
             _uiState.update {
                 it.copy(origin = origin)
@@ -53,7 +54,7 @@ class OriginViewModel @Inject constructor(
     }
 
     fun updateOrigin(origin: Origin) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             originRepository.update(origin)
             sharedData.loadOrigins()
             sharedData.loadBeans()
@@ -62,7 +63,7 @@ class OriginViewModel @Inject constructor(
     }
 
     fun loadOrigins() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             sharedData.loadOrigins()
         }
     }

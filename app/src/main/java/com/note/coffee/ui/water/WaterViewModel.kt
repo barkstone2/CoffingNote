@@ -7,6 +7,7 @@ import com.note.coffee.data.entity.water.Water
 import com.note.coffee.data.repository.water.WaterRepository
 import com.note.coffee.ui.SharedData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,7 @@ class WaterViewModel @Inject constructor(
     }
 
     fun saveWater(water: Water) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             waterRepository.insert(water)
             sharedData.loadWaters()
         }
@@ -36,7 +37,7 @@ class WaterViewModel @Inject constructor(
 
 
     fun deleteWater(water: Water) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             waterRepository.delete(water)
             sharedData.loadWaters()
             sharedData.loadRecipes()
@@ -44,7 +45,7 @@ class WaterViewModel @Inject constructor(
     }
 
     fun getWater(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val water = waterRepository.get(id)
             _uiState.update {
                 it.copy(water = water)
@@ -53,7 +54,7 @@ class WaterViewModel @Inject constructor(
     }
 
     fun updateWater(water: Water) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             waterRepository.update(water)
             sharedData.loadWaters()
             sharedData.loadRecipes()

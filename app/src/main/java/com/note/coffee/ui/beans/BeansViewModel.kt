@@ -8,6 +8,7 @@ import com.note.coffee.data.entity.beans.Bean
 import com.note.coffee.data.repository.beans.BeanRepository
 import com.note.coffee.ui.SharedData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,21 +30,22 @@ class BeansViewModel @Inject constructor(
     }
 
     fun saveBean(bean: Bean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             beanRepository.insert(bean)
             sharedData.loadBeans()
         }
     }
 
     fun deleteBean(bean: Bean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             beanRepository.delete(bean)
-            sharedData.deleteBean(bean)
+            sharedData.loadRecipes()
+            sharedData.loadBeans()
         }
     }
 
     fun getBean(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val bean = beanRepository.get(id)
             _uiState.update {
                 it.copy(bean = bean)
@@ -52,7 +54,7 @@ class BeansViewModel @Inject constructor(
     }
 
     fun updateBean(bean: Bean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             beanRepository.update(bean)
             sharedData.loadBeans()
             sharedData.loadRecipes()
