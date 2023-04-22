@@ -7,6 +7,7 @@ import com.note.coffee.data.dao.handmills.HandMillDao
 import com.note.coffee.data.dao.origin.OriginDao
 import com.note.coffee.data.dao.recipes.RecipeDao
 import com.note.coffee.data.dao.roastery.RoasteryDao
+import com.note.coffee.data.dao.water.WaterDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +48,10 @@ object DbModule {
     @Singleton
     @Provides
     fun provideRecipeDao(appDatabase: AppDatabase): RecipeDao = appDatabase.recipeDao()
+
+    @Singleton
+    @Provides
+    fun provideWaterDao(appDatabase: AppDatabase): WaterDao = appDatabase.waterDao()
 
 
 }
