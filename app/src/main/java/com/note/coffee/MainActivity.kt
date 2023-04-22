@@ -23,6 +23,7 @@ import com.note.coffee.ui.origin.OriginViewModel
 import com.note.coffee.ui.recipes.RecipesViewModel
 import com.note.coffee.ui.roastery.RoasteryViewModel
 import com.note.coffee.ui.theme.CoffingNoteTheme
+import com.note.coffee.ui.water.WaterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
             val recipesViewModel: RecipesViewModel = hiltViewModel()
             val originViewModel: OriginViewModel = hiltViewModel()
             val roasteryViewModel: RoasteryViewModel = hiltViewModel()
+            val waterViewModel: WaterViewModel = hiltViewModel()
 
             AppDatabase.databaseCreated.observe(this) {
                 if (it) {
@@ -89,6 +91,7 @@ class MainActivity : ComponentActivity() {
                                 recipesViewModel = recipesViewModel,
                                 roasteryViewModel = roasteryViewModel,
                                 originViewModel = originViewModel,
+                                waterViewModel = waterViewModel,
                             )
                         }
                     }
