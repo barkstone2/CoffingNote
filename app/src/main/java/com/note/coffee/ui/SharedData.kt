@@ -8,12 +8,14 @@ import com.note.coffee.data.entity.beans.Origin
 import com.note.coffee.data.entity.beans.Roastery
 import com.note.coffee.data.entity.drippers.Dripper
 import com.note.coffee.data.entity.handmills.HandMill
+import com.note.coffee.data.entity.water.Water
 import com.note.coffee.data.repository.beans.BeanRepository
 import com.note.coffee.data.repository.beans.OriginRepository
 import com.note.coffee.data.repository.beans.RoasteryRepository
 import com.note.coffee.data.repository.drippers.DripperRepository
 import com.note.coffee.data.repository.handmills.HandMillRepository
 import com.note.coffee.data.repository.recipes.RecipeRepository
+import com.note.coffee.data.repository.water.WaterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,7 @@ class SharedData @Inject constructor(
     private val roasteryRepository: RoasteryRepository,
     private val handMillRepository: HandMillRepository,
     private val dripperRepository: DripperRepository,
+    private val waterRepository: WaterRepository,
 ) {
 
     private val _beans: MutableStateFlow<List<BeanResponse>> = MutableStateFlow(listOf())
@@ -50,6 +53,9 @@ class SharedData @Inject constructor(
 
     private val _recipes: MutableStateFlow<List<RecipeResponse>> = MutableStateFlow(listOf())
     val recipes: StateFlow<List<RecipeResponse>> = _recipes.asStateFlow()
+
+    private val _waters: MutableStateFlow<List<Water>> = MutableStateFlow(listOf())
+    val waters: StateFlow<List<Water>> = _waters.asStateFlow()
 
     suspend fun loadBeans() {
         _beans.value = beanRepository.getAll()
@@ -75,6 +81,10 @@ class SharedData @Inject constructor(
         _recipes.value = recipeRepository.getAll()
     }
 
+    suspend fun loadWaters() {
+        _waters.value = waterRepository.getAll()
+    }
+
     suspend fun deleteBean(bean: Bean) {
         recipeRepository.deleteAllByBeanId(bean.id)
         loadBeans()
@@ -91,6 +101,7 @@ class SharedData @Inject constructor(
             loadHandMills()
             loadDrippers()
             loadRecipes()
+            loadWaters()
         }
 
     }
