@@ -7,6 +7,7 @@ import com.note.coffee.data.entity.beans.Bean
 import com.note.coffee.data.entity.drippers.Dripper
 import com.note.coffee.data.entity.handmills.HandMill
 import com.note.coffee.data.entity.recipes.Recipe
+import com.note.coffee.data.entity.water.Water
 
 data class RecipeResponse(
     @Embedded val recipe: Recipe,
@@ -29,4 +30,10 @@ data class RecipeResponse(
         entityColumn = "id"
     )
     var handMill: HandMill?,
+
+    @Relation(
+        parentColumn = "waterId",
+        entityColumn = "id"
+    )
+    var water: Water?
 )
