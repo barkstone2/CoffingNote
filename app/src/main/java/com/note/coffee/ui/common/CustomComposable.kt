@@ -128,12 +128,8 @@ fun OutlinedText(
 
 @SuppressLint("VisibleForTests")
 @Composable
-fun BannerAdView(
-    isTest: Boolean = true
-) {
-    val unitId = if (isTest) stringResource(id = R.string.ad_mob_test_banner_id) else stringResource(
-        id = R.string.ad_mob_test_banner_id
-    )
+fun BannerAdView() {
+    val unitId = stringResource(id = R.string.ad_mob_banner_id)
     val screenWidth = LocalConfiguration.current.screenWidthDp
 
     Column(

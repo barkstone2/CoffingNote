@@ -66,7 +66,7 @@ class MainApplication: Application(), Application.ActivityLifecycleCallbacks {
             val request = AdRequest.Builder().build()
             AppOpenAd.load(
                 context,
-                context.getString(R.string.ad_mob_test_opening_id),
+                context.getString(R.string.ad_mob_opening_id),
                 request,
                 object : AppOpenAdLoadCallback() {
 

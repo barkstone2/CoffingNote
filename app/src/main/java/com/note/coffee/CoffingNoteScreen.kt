@@ -243,7 +243,7 @@ fun CoffingNoteAppBar(
                     }
                 }
             )
-            BannerAdView(isTest = true)
+            BannerAdView()
         }
     }
 }
