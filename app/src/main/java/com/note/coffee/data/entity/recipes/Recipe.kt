@@ -9,7 +9,10 @@ data class Recipe(
     val beanId: Long?,
     val dripperId: Long?,
     val handMillId: Long?,
+    val waterId: Long?,
     val temperature: Int?,
     val grindingDegree: Int?,
+    val waterRatio: Float?,
+    val beenRatio: Float?,
     val comment: String? = null
 )
