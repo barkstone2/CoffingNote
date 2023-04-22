@@ -5,6 +5,7 @@ import com.note.coffee.data.dto.recipes.RecipeRequest
 import com.note.coffee.data.dto.recipes.RecipeResponse
 import com.note.coffee.data.entity.drippers.Dripper
 import com.note.coffee.data.entity.handmills.HandMill
+import com.note.coffee.data.entity.water.Water
 import com.note.coffee.ui.SharedData
 
 data class RecipesUiState(
@@ -22,4 +23,6 @@ data class RecipesUiState(
         get() = sharedData.drippers.value
     val handMills: List<HandMill>
         get() = sharedData.handMills.value
+    val waters: List<Water>
+        get() = sharedData.waters.value
 }
