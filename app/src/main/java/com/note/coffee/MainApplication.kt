@@ -36,8 +36,6 @@ class MainApplication: Application(), Application.ActivityLifecycleCallbacks {
         onShowAdCompleteListener: OnShowAdCompleteListener,
         onAdLoaded: () -> Unit = {}
     ) {
-        // We wrap the showAdIfAvailable to enforce that other classes only interact with MyApplication
-        // class.
         appOpenAdManager.showAdIfAvailable(activity, onShowAdCompleteListener, onAdLoaded)
     }
 
@@ -97,6 +95,7 @@ class MainApplication: Application(), Application.ActivityLifecycleCallbacks {
 
             if (isShowingAd) {
                 Log.d("main", "The app open ad is already showing.")
+                onAdLoaded()
                 return
             }
 
