@@ -15,12 +15,14 @@ import com.note.coffee.data.dao.handmills.HandMillDao
 import com.note.coffee.data.dao.origin.OriginDao
 import com.note.coffee.data.dao.recipes.RecipeDao
 import com.note.coffee.data.dao.roastery.RoasteryDao
+import com.note.coffee.data.dao.water.WaterDao
 import com.note.coffee.data.entity.beans.Bean
 import com.note.coffee.data.entity.beans.Origin
 import com.note.coffee.data.entity.beans.Roastery
 import com.note.coffee.data.entity.drippers.Dripper
 import com.note.coffee.data.entity.handmills.HandMill
 import com.note.coffee.data.entity.recipes.Recipe
+import com.note.coffee.data.entity.water.Water
 import com.note.coffee.data.room.converter.RoastDegreeConverter
 import com.note.coffee.data.room.converter.StringListConverter
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +36,8 @@ import kotlinx.coroutines.launch
         Roastery::class,
         HandMill::class,
         Dripper::class,
-        Recipe::class
+        Recipe::class,
+        Water::class
     ],
     version = 2,
     exportSchema = false
@@ -47,6 +50,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun handMillDao(): HandMillDao
     abstract fun dripperDao(): DripperDao
     abstract fun recipeDao(): RecipeDao
+    abstract fun waterDao(): WaterDao
 
     companion object {
         @Volatile
