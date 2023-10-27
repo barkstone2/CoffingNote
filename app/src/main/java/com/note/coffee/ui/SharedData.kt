@@ -35,54 +35,54 @@ class SharedData @Inject constructor(
     private val waterRepository: WaterRepository,
 ) {
 
-    private val _beans: MutableStateFlow<List<BeanResponse>> = MutableStateFlow(listOf())
+    private val _beans: MutableStateFlow<MutableList<BeanResponse>> = MutableStateFlow(mutableListOf())
     val beans: StateFlow<List<BeanResponse>> = _beans.asStateFlow()
 
-    private val _origins: MutableStateFlow<List<Origin>> = MutableStateFlow(listOf())
+    private val _origins: MutableStateFlow<MutableList<Origin>> = MutableStateFlow(mutableListOf())
     val origins: StateFlow<List<Origin>> = _origins.asStateFlow()
 
-    private val _roasteries: MutableStateFlow<List<Roastery>> = MutableStateFlow(listOf())
+    private val _roasteries: MutableStateFlow<MutableList<Roastery>> = MutableStateFlow(mutableListOf())
     val roasteries: StateFlow<List<Roastery>> = _roasteries.asStateFlow()
 
-    private val _handMills: MutableStateFlow<List<HandMill>> = MutableStateFlow(listOf())
+    private val _handMills: MutableStateFlow<MutableList<HandMill>> = MutableStateFlow(mutableListOf())
     val handMills: StateFlow<List<HandMill>> = _handMills.asStateFlow()
 
-    private val _drippers: MutableStateFlow<List<Dripper>> = MutableStateFlow(listOf())
+    private val _drippers: MutableStateFlow<MutableList<Dripper>> = MutableStateFlow(mutableListOf())
     val drippers: StateFlow<List<Dripper>> = _drippers.asStateFlow()
 
     private val _recipes: MutableStateFlow<MutableList<RecipeResponse>> = MutableStateFlow(mutableListOf())
     val recipes: StateFlow<List<RecipeResponse>> = _recipes.asStateFlow()
 
-    private val _waters: MutableStateFlow<List<Water>> = MutableStateFlow(listOf())
+    private val _waters: MutableStateFlow<MutableList<Water>> = MutableStateFlow(mutableListOf())
     val waters: StateFlow<List<Water>> = _waters.asStateFlow()
 
     suspend fun loadBeans() {
         CoroutineScope(Dispatchers.IO).launch {
-            _beans.value = beanRepository.getAll()
+            _beans.value = beanRepository.getAll().toMutableList()
         }
     }
 
     suspend fun loadOrigins() {
         CoroutineScope(Dispatchers.IO).launch {
-            _origins.value = originRepository.getAll()
+            _origins.value = originRepository.getAll().toMutableList()
         }
     }
 
     suspend fun loadRoasteries() {
         CoroutineScope(Dispatchers.IO).launch {
-            _roasteries.value = roasteryRepository.getAll()
+            _roasteries.value = roasteryRepository.getAll().toMutableList()
         }
     }
 
     suspend fun loadHandMills() {
         CoroutineScope(Dispatchers.IO).launch {
-            _handMills.value = handMillRepository.getAll()
+            _handMills.value = handMillRepository.getAll().toMutableList()
         }
     }
 
     suspend fun loadDrippers() {
         CoroutineScope(Dispatchers.IO).launch {
-            _drippers.value = dripperRepository.getAll()
+            _drippers.value = dripperRepository.getAll().toMutableList()
         }
     }
 
@@ -94,7 +94,7 @@ class SharedData @Inject constructor(
 
     suspend fun loadWaters() {
         CoroutineScope(Dispatchers.IO).launch {
-            _waters.value = waterRepository.getAll()
+            _waters.value = waterRepository.getAll().toMutableList()
         }
     }
 
