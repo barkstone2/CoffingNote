@@ -102,42 +102,42 @@ enum class CoffingNoteScreen(
     ),
 
     OriginList(
-        title = R.string.origin_list, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.origin_list, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     OriginSave(
-        title = R.string.origin_save, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.origin_save, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     OriginDetail(
-        title = R.string.origin_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.origin_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     OriginUpdate(
-        title = R.string.origin_update, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.origin_update, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
 
     RoasteryList(
-        title = R.string.roastery_list, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.roastery_list, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     RoasterySave(
-        title = R.string.roastery_save, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.roastery_save, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     RoasteryDetail(
-        title = R.string.roastery_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.roastery_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     RoasteryUpdate(
-        title = R.string.roastery_update, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.roastery_update, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
 
     WaterList(
-        title = R.string.water_list, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.water_list, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     WaterSave(
-        title = R.string.water_save, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.water_save, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     WaterDetail(
-        title = R.string.water_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.water_detail, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
     WaterUpdate(
-        title = R.string.water_update, hasTopBar = true, canNavigateBack = true, hasNavBar = false
+        title = R.string.water_update, hasTopBar = true, canNavigateBack = true, hasNavBar = true
     ),
 }
 
