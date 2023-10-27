@@ -283,19 +283,19 @@ fun RecipeListScreen(
                     }
                 }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(0.95f)
-                    .padding(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.End,
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize(0.95f)
+                .padding(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End,
+        ) {
+            SmallFloatingActionButton(
+                onClick = onNavigateToSave,
+                containerColor = LightCoffee,
             ) {
-                SmallFloatingActionButton(
-                    onClick = onNavigateToSave,
-                    containerColor = LightCoffee,
-                ) {
-                    Text(text = "+", fontSize = 20.sp)
-                }
+                Text(text = "+", fontSize = 20.sp)
             }
         }
     }
