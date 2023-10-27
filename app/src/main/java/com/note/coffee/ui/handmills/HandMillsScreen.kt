@@ -120,15 +120,6 @@ fun HandMillListScreen(
                                                 .padding(3.dp)
                                         )
                                     }
-                                    Text(
-                                        text = "idx - $idx"
-                                    )
-                                    Text(
-                                        text = "orderId - ${it.orderId}"
-                                    )
-                                    Text(
-                                        text = "id - ${it.id}"
-                                    )
                                 }
                                 Column() {
                                     Icon(
