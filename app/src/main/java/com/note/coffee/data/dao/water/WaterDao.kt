@@ -20,4 +20,9 @@ interface WaterDao {
     @Update
     suspend fun update(water: Water)
 
+    @Query("UPDATE water SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM water")
+    suspend fun getNextOrderId() : Long
 }

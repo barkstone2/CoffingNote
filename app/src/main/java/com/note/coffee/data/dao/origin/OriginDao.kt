@@ -20,4 +20,10 @@ interface OriginDao {
 
     @Update
     suspend fun update(origin: Origin)
+
+    @Query("UPDATE origin SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM origin")
+    suspend fun getNextOrderId() : Long
 }

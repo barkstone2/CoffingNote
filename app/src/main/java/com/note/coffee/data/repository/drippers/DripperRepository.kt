@@ -1,5 +1,6 @@
 package com.note.coffee.data.repository.drippers
 
+import androidx.room.Transaction
 import com.note.coffee.data.dao.drippers.DripperDao
 import com.note.coffee.data.entity.drippers.Dripper
 import javax.inject.Inject
@@ -28,4 +29,12 @@ class DripperRepository @Inject constructor(
         dripperDao.update(dripper)
     }
 
+    @Transaction
+    suspend fun reorder(current: Dripper, other: Dripper) {
+        val orderId = current.orderId
+        val otherOrderId = other.orderId
+
+        dripperDao.changeOrder(current.id, otherOrderId)
+        dripperDao.changeOrder(other.id, orderId)
+    }
 }

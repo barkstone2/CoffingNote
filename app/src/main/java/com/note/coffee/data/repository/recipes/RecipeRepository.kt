@@ -1,5 +1,6 @@
 package com.note.coffee.data.repository.recipes
 
+import androidx.room.Transaction
 import com.note.coffee.data.dao.recipes.RecipeDao
 import com.note.coffee.data.dto.recipes.RecipeResponse
 import com.note.coffee.data.entity.recipes.Recipe
@@ -31,6 +32,15 @@ class RecipeRepository @Inject constructor(
 
     suspend fun deleteAllByBeanId(beanId: Long) {
         recipeDao.deleteAllByBeanId(beanId)
+    }
+
+    @Transaction
+    suspend fun reorder(current: Recipe, other: Recipe) {
+        val orderId = current.orderId
+        val otherOrderId = other.orderId
+
+        recipeDao.changeOrder(current.id, otherOrderId)
+        recipeDao.changeOrder(other.id, orderId)
     }
 
 }

@@ -20,4 +20,9 @@ interface RoasteryDao {
     @Update
     suspend fun update(roastery: Roastery)
 
+    @Query("UPDATE roastery SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM roastery")
+    suspend fun getNextOrderId() : Long
 }

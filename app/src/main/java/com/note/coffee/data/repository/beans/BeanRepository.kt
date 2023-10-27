@@ -1,5 +1,6 @@
 package com.note.coffee.data.repository.beans
 
+import androidx.room.Transaction
 import com.note.coffee.data.dao.beans.BeanDao
 import com.note.coffee.data.dto.beans.BeanResponse
 import com.note.coffee.data.entity.beans.Bean
@@ -29,4 +30,12 @@ class BeanRepository @Inject constructor(
         beanDao.update(bean)
     }
 
+    @Transaction
+    suspend fun reorder(current: Bean, other: Bean) {
+        val orderId = current.orderId
+        val otherOrderId = other.orderId
+
+        beanDao.changeOrder(current.id, otherOrderId)
+        beanDao.changeOrder(other.id, orderId)
+    }
 }

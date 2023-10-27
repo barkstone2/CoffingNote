@@ -23,4 +23,10 @@ interface BeanDao {
 
     @Update
     suspend fun update(bean: Bean)
+
+    @Query("UPDATE bean SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM bean")
+    suspend fun getNextOrderId() : Long
 }

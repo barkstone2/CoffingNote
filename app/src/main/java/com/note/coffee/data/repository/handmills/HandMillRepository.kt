@@ -1,5 +1,6 @@
 package com.note.coffee.data.repository.handmills
 
+import androidx.room.Transaction
 import com.note.coffee.data.dao.handmills.HandMillDao
 import com.note.coffee.data.entity.handmills.HandMill
 import javax.inject.Inject
@@ -28,4 +29,12 @@ class HandMillRepository @Inject constructor(
         handMillDao.update(handMill)
     }
 
+    @Transaction
+    suspend fun reorder(current: HandMill, other: HandMill) {
+        val orderId = current.orderId
+        val otherOrderId = other.orderId
+
+        handMillDao.changeOrder(current.id, otherOrderId)
+        handMillDao.changeOrder(other.id, orderId)
+    }
 }

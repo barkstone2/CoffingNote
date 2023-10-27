@@ -21,4 +21,9 @@ interface HandMillDao {
     @Update
     suspend fun update(handMill: HandMill)
 
+    @Query("UPDATE hand_mill SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM hand_mill")
+    suspend fun getNextOrderId() : Long
 }

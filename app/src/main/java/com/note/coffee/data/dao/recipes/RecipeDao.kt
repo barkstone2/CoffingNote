@@ -25,4 +25,9 @@ interface RecipeDao {
     @Query("delete from recipe where beanId = :beanId")
     suspend fun deleteAllByBeanId(beanId: Long)
 
+    @Query("UPDATE recipe SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM recipe")
+    suspend fun getNextOrderId() : Long
 }

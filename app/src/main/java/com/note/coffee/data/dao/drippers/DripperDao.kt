@@ -21,4 +21,9 @@ interface DripperDao {
     @Update
     suspend fun update(dripper: Dripper)
 
+    @Query("UPDATE dripper SET orderId = :orderId WHERE id = :id")
+    suspend fun changeOrder(id: Long, orderId: Long)
+
+    @Query("SELECT COALESCE(MAX(orderId), 0)+1 FROM dripper")
+    suspend fun getNextOrderId() : Long
 }
