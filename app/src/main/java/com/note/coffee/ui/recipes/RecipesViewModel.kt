@@ -63,6 +63,9 @@ class RecipesViewModel @Inject constructor(
     fun selectRecipeBean(bean: BeanResponse) {
         viewModelScope.launch(Dispatchers.IO) {
             sharedData.loadRecipes(bean.bean.id)
+            _uiState.update {
+                it.copy(bean = bean)
+            }
         }
     }
 
