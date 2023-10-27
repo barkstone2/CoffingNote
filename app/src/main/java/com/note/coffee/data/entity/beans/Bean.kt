@@ -12,7 +12,8 @@ data class Bean(
     val roasteryId: Long?,
     val roastDegree: RoastDegree?,
     val cuppingNotes: List<String>,
-    val comment: String? = null
+    val comment: String? = null,
+    var orderId: Long = 0,
 ) {
 
 }

@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Water(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String?,
-    val comment: String? = null
+    val comment: String? = null,
+    var orderId: Long = 0,
 )

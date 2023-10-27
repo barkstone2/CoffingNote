@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
         Recipe::class,
         Water::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(value = [StringListConverter::class, RoastDegreeConverter::class])
@@ -59,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): AppDatabase = INSTANCE ?: Room
             .databaseBuilder(context, AppDatabase::class.java, "coffing_note.db")
-            .addMigrations(migrate_1_2, migrate_2_3)
+            .addMigrations(migrate_1_2, migrate_2_3, migrate_3_4)
             .addCallback(object : Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
@@ -75,8 +75,8 @@ abstract class AppDatabase : RoomDatabase() {
             Log.d("AppDatabase", "init default origins")
             var defaultOrigins = listOf("콜롬비아", "과테말라", "베트남", "케냐", "에티오피아")
             defaultOrigins = defaultOrigins.sorted()
-            for (origin in defaultOrigins) {
-                getInstance(context).originDao().insert(Origin(0, origin))
+            for ((index, origin) in defaultOrigins.withIndex()) {
+                getInstance(context).originDao().insert(Origin(0, origin, (index+1).toLong()))
             }
         }
 
@@ -101,6 +101,25 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        private val migrate_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE bean ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE recipe ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE dripper ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE hand_mill ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE origin ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE roastery ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE water ADD COLUMN `orderId` INTEGER")
+
+                database.execSQL("UPDATE bean SET orderId=id")
+                database.execSQL("UPDATE recipe SET orderId=id")
+                database.execSQL("UPDATE dripper SET orderId=id")
+                database.execSQL("UPDATE hand_mill SET orderId=id")
+                database.execSQL("UPDATE origin SET orderId=id")
+                database.execSQL("UPDATE roastery SET orderId=id")
+                database.execSQL("UPDATE water SET orderId=id")
+            }
+        }
 
     }
 

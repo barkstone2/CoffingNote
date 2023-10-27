@@ -14,7 +14,8 @@ data class Recipe(
     val grindingDegree: Int?,
     val waterRatio: Float?,
     val beenRatio: Float?,
-    val comment: String? = null
+    val comment: String? = null,
+    var orderId: Long = 0,
 ) {
    fun getRatioText(): String {
        return buildString {

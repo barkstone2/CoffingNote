@@ -8,7 +8,8 @@ data class HandMill(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String?,
     val createdBy: String?,
-    val comment: String? = null
+    val comment: String? = null,
+    var orderId: Long = 0,
 ) {
     fun getFullName(): String? {
         var result = name
