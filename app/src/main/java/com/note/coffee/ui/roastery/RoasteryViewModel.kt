@@ -61,4 +61,14 @@ class RoasteryViewModel @Inject constructor(
         }
     }
 
+    fun reorderRoastery(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.roasteries.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            roasteryRepository.reorder(sharedData.roasteries.value[idx], sharedData.roasteries.value[otherIdx])
+            sharedData.reorderRoastery(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
 }

@@ -66,4 +66,14 @@ class OriginViewModel @Inject constructor(
         }
     }
 
+    fun reorderOrigin(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.origins.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            originRepository.reorder(sharedData.origins.value[idx], sharedData.origins.value[otherIdx])
+            sharedData.reorderOrigin(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
 }

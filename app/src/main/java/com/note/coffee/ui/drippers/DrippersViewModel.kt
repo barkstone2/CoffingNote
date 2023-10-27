@@ -59,4 +59,14 @@ class DrippersViewModel @Inject constructor(
         }
     }
 
+    fun reorderDripper(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.drippers.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            dripperRepository.reorder(sharedData.drippers.value[idx], sharedData.drippers.value[otherIdx])
+            sharedData.reorderDripper(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
 }

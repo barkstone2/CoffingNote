@@ -59,4 +59,15 @@ class WaterViewModel @Inject constructor(
         }
     }
 
+    fun reorderWater(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.waters.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            waterRepository.reorder(sharedData.waters.value[idx], sharedData.waters.value[otherIdx])
+            sharedData.reorderWater(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
+
 }

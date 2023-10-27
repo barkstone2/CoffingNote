@@ -83,4 +83,14 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
+    fun reorderRecipe(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.recipes.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            recipeRepository.reorder(sharedData.recipes.value[idx].recipe, sharedData.recipes.value[otherIdx].recipe)
+            sharedData.reorderRecipe(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
 }

@@ -98,6 +98,65 @@ class SharedData @Inject constructor(
         }
     }
 
+    fun reorderHandmill(idx: Int, otherIdx: Int) {
+        reorder(_handMills, idx, otherIdx, { it.orderId }) {
+                it, orderId -> it.orderId = orderId
+        }
+    }
+
+    fun reorderBean(idx: Int, otherIdx: Int) {
+        reorder(_beans, idx, otherIdx, { it.bean.orderId }) {
+                it, orderId -> it.bean.orderId = orderId
+        }
+    }
+
+    fun reorderWater(idx: Int, otherIdx: Int) {
+        reorder(_waters, idx, otherIdx, { it.orderId }) {
+                it, orderId -> it.orderId = orderId
+        }
+    }
+
+    fun reorderRoastery(idx: Int, otherIdx: Int) {
+        reorder(_roasteries, idx, otherIdx, { it.orderId }) {
+                it, orderId -> it.orderId = orderId
+        }
+    }
+
+    fun reorderDripper(idx: Int, otherIdx: Int) {
+        reorder(_drippers, idx, otherIdx, { it.orderId }) {
+                it, orderId -> it.orderId = orderId
+        }
+    }
+
+    fun reorderOrigin(idx: Int, otherIdx: Int) {
+        reorder(_origins, idx, otherIdx, { it.orderId }) {
+                it, orderId -> it.orderId = orderId
+        }
+    }
+
+    fun reorderRecipe(idx: Int, otherIdx: Int) {
+        reorder(_recipes, idx, otherIdx, { it.recipe.orderId }) {
+                it, orderId -> it.recipe.orderId = orderId
+        }
+    }
+
+    fun <E> reorder(
+        target: MutableStateFlow<MutableList<E>>, idx: Int, otherIdx: Int,
+        accessOrderId: (E) -> Long, assignOrderId: (E, Long) -> Unit
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val orderId = accessOrderId(target.value[idx])
+            val otherOrderId = accessOrderId(target.value[otherIdx])
+
+            assignOrderId(target.value[idx], otherOrderId)
+            assignOrderId(target.value[otherIdx], orderId)
+
+            val temp = target.value[idx]
+            target.value[idx] = target.value[otherIdx]
+            target.value[otherIdx] = temp
+        }
+    }
+
     init {
         Log.d(this::class.simpleName, "init")
 

@@ -59,4 +59,15 @@ class HandMillsViewModel @Inject constructor(
         }
     }
 
+    fun reorderHandMill(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.handMills.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            handMillRepository.reorder(sharedData.handMills.value[idx], sharedData.handMills.value[otherIdx])
+            sharedData.reorderHandmill(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
+
 }

@@ -65,5 +65,16 @@ class BeansViewModel @Inject constructor(
         }
     }
 
+    fun reorderBean(idx: Int, otherIdx: Int) {
+        if(otherIdx < 0 || otherIdx >= sharedData.beans.value.size) return
+        viewModelScope.launch(Dispatchers.IO) {
+            beanRepository.reorder(sharedData.beans.value[idx].bean, sharedData.beans.value[otherIdx].bean)
+            sharedData.reorderBean(idx, otherIdx)
+            _uiState.update {
+                it.copy(version = it.version+1)
+            }
+        }
+    }
+
 
 }
