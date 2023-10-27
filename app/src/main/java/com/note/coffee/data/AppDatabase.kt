@@ -103,13 +103,13 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val migrate_3_4 = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE bean ADD COLUMN `orderId` INTEGER")
-                database.execSQL("ALTER TABLE recipe ADD COLUMN `orderId` INTEGER")
-                database.execSQL("ALTER TABLE dripper ADD COLUMN `orderId` INTEGER")
-                database.execSQL("ALTER TABLE hand_mill ADD COLUMN `orderId` INTEGER")
-                database.execSQL("ALTER TABLE origin ADD COLUMN `orderId` INTEGER")
-                database.execSQL("ALTER TABLE roastery ADD COLUMN `orderId` INTEGER")
-                database.execSQL("ALTER TABLE water ADD COLUMN `orderId` INTEGER")
+                database.execSQL("ALTER TABLE bean ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE recipe ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE dripper ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE hand_mill ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE origin ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE roastery ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
+                database.execSQL("ALTER TABLE water ADD COLUMN `orderId` INTEGER NOT NULL DEFAULT 0")
 
                 database.execSQL("UPDATE bean SET orderId=id")
                 database.execSQL("UPDATE recipe SET orderId=id")
