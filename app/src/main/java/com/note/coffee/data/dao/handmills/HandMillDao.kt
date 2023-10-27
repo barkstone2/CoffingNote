@@ -6,7 +6,7 @@ import com.note.coffee.data.entity.handmills.HandMill
 @Dao
 interface HandMillDao {
 
-    @Query("SELECT * FROM hand_mill")
+    @Query("SELECT * FROM hand_mill ORDER BY orderId DESC")
     suspend fun getAll(): List<HandMill>
 
     @Query("select * from hand_mill where id = :id")

@@ -9,7 +9,7 @@ interface OriginDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(origin: Origin): Long
 
-    @Query("SELECT * FROM origin")
+    @Query("SELECT * FROM origin ORDER BY orderId DESC")
     suspend fun getAll(): List<Origin>
 
     @Query("select * from origin where id = :id")

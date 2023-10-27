@@ -8,7 +8,7 @@ import com.note.coffee.data.entity.beans.Bean
 interface BeanDao {
 
     @Transaction
-    @Query("SELECT * FROM bean ORDER BY id DESC")
+    @Query("SELECT * FROM bean ORDER BY orderId DESC")
     suspend fun getAll(): List<BeanResponse>
 
     @Transaction

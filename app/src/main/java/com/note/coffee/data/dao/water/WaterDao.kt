@@ -8,7 +8,7 @@ interface WaterDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(water: Water): Long
 
-    @Query("SELECT * FROM water")
+    @Query("SELECT * FROM water ORDER BY orderId DESC")
     suspend fun getAll(): List<Water>
 
     @Delete

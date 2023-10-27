@@ -6,7 +6,7 @@ import com.note.coffee.data.entity.drippers.Dripper
 @Dao
 interface DripperDao {
 
-    @Query("SELECT * FROM dripper")
+    @Query("SELECT * FROM dripper ORDER BY orderId DESC")
     suspend fun getAll(): List<Dripper>
 
     @Query("select * from dripper where id = :id")
