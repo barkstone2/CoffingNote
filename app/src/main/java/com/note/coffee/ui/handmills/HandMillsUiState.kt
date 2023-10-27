@@ -5,7 +5,8 @@ import com.note.coffee.ui.SharedData
 
 data class HandMillsUiState(
     val handMill: HandMill? = null,
-    val sharedData: SharedData
+    val sharedData: SharedData,
+    val version: Int = 0
 ) {
     val handMills: List<HandMill>
         get() = sharedData.handMills.value

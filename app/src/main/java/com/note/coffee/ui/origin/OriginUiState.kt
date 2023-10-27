@@ -5,7 +5,8 @@ import com.note.coffee.ui.SharedData
 
 data class OriginUiState(
     val origin: Origin? = null,
-    val sharedData: SharedData
+    val sharedData: SharedData,
+    val version: Int = 0
 ) {
 
     val origins: List<Origin>

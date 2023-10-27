@@ -9,7 +9,8 @@ import com.note.coffee.ui.SharedData
 data class BeansUiState(
     val newBean: BeanRequest = BeanRequest(),
     val bean: BeanResponse? = null,
-    val sharedData: SharedData
+    val sharedData: SharedData,
+    val version: Int = 0
 ) {
 
     val beans: List<BeanResponse>

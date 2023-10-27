@@ -5,7 +5,8 @@ import com.note.coffee.ui.SharedData
 
 data class RoasteryUiState(
     val roastery: Roastery? = null,
-    val sharedData: SharedData
+    val sharedData: SharedData,
+    val version: Int = 0
 ) {
 
     val roasteries: List<Roastery>

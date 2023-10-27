@@ -13,7 +13,8 @@ data class RecipesUiState(
     val recipe: RecipeResponse? = null,
     val bean: BeanResponse? = null,
     val errorMessage: String? = null,
-    val sharedData: SharedData
+    val sharedData: SharedData,
+    val version: Int = 0
 ) {
     val recipes: List<RecipeResponse>
         get() = sharedData.recipes.value
