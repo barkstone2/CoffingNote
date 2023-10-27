@@ -40,7 +40,6 @@ class DrippersViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dripperRepository.delete(dripper)
             sharedData.loadDrippers()
-            sharedData.loadRecipes()
         }
     }
 
@@ -57,7 +56,6 @@ class DrippersViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             dripperRepository.update(dripper)
             sharedData.loadDrippers()
-            sharedData.loadRecipes()
         }
     }
 

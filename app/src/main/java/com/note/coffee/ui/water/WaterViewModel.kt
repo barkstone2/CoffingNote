@@ -40,7 +40,6 @@ class WaterViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             waterRepository.delete(water)
             sharedData.loadWaters()
-            sharedData.loadRecipes()
         }
     }
 
@@ -57,7 +56,6 @@ class WaterViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             waterRepository.update(water)
             sharedData.loadWaters()
-            sharedData.loadRecipes()
         }
     }
 

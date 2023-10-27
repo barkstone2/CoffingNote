@@ -9,8 +9,8 @@ class RecipeRepository @Inject constructor(
     private val recipeDao: RecipeDao,
 ) {
 
-    suspend fun getAll(): List<RecipeResponse> {
-        return recipeDao.getAll()
+    suspend fun getAllOfBean(beanId: Long): List<RecipeResponse> {
+        return recipeDao.getAllOfBean(beanId)
     }
 
     suspend fun insert(recipe: Recipe) {

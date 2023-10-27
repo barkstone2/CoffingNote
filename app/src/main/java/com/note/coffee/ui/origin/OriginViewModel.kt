@@ -40,7 +40,6 @@ class OriginViewModel @Inject constructor(
             originRepository.delete(origin)
             sharedData.loadOrigins()
             sharedData.loadBeans()
-            sharedData.loadRecipes()
         }
     }
 
@@ -58,7 +57,6 @@ class OriginViewModel @Inject constructor(
             originRepository.update(origin)
             sharedData.loadOrigins()
             sharedData.loadBeans()
-            sharedData.loadRecipes()
         }
     }
 

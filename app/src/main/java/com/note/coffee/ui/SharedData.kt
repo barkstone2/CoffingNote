@@ -50,7 +50,7 @@ class SharedData @Inject constructor(
     private val _drippers: MutableStateFlow<List<Dripper>> = MutableStateFlow(listOf())
     val drippers: StateFlow<List<Dripper>> = _drippers.asStateFlow()
 
-    private val _recipes: MutableStateFlow<List<RecipeResponse>> = MutableStateFlow(listOf())
+    private val _recipes: MutableStateFlow<MutableList<RecipeResponse>> = MutableStateFlow(mutableListOf())
     val recipes: StateFlow<List<RecipeResponse>> = _recipes.asStateFlow()
 
     private val _waters: MutableStateFlow<List<Water>> = MutableStateFlow(listOf())
@@ -86,9 +86,9 @@ class SharedData @Inject constructor(
         }
     }
 
-    suspend fun loadRecipes() {
+    suspend fun loadRecipes(beanId: Long) {
         CoroutineScope(Dispatchers.IO).launch {
-            _recipes.value = recipeRepository.getAll()
+            _recipes.value = recipeRepository.getAllOfBean(beanId).toMutableList()
         }
     }
 
@@ -107,7 +107,6 @@ class SharedData @Inject constructor(
             loadRoasteries()
             loadHandMills()
             loadDrippers()
-            loadRecipes()
             loadWaters()
         }
 

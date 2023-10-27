@@ -369,10 +369,6 @@ fun CoffingNoteApp(
             composable(route = CoffingNoteScreen.RecipeBeanList.name) {
                 RecipeBeanListScreen(
                     recipesUiState = recipesUiState,
-                    onNavigateToSave = {
-                        recipesViewModel.selectRecipeBean(null)
-                        navController.navigate(CoffingNoteScreen.RecipeSave.name)
-                    },
                     onNavigateToRecipeList = {
                         recipesViewModel.selectRecipeBean(it)
                         navController.navigate(CoffingNoteScreen.RecipeList.name)

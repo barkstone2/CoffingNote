@@ -41,7 +41,6 @@ class RoasteryViewModel @Inject constructor(
             roasteryRepository.delete(roastery)
             sharedData.loadRoasteries()
             sharedData.loadBeans()
-            sharedData.loadRecipes()
         }
     }
 
@@ -59,7 +58,6 @@ class RoasteryViewModel @Inject constructor(
             roasteryRepository.update(roastery)
             sharedData.loadRoasteries()
             sharedData.loadBeans()
-            sharedData.loadRecipes()
         }
     }
 

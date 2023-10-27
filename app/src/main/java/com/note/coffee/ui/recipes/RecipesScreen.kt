@@ -37,13 +37,11 @@ import com.note.coffee.ui.theme.White
 @Composable
 fun RecipeBeanListScreen(
     recipesUiState: RecipesUiState,
-    onNavigateToSave: () -> Unit,
     onNavigateToRecipeList: (BeanResponse) -> Unit,
 ) {
     Log.d("RecipeBeanListScreen", "start")
 
     val beans = recipesUiState.beans
-    val recipes = recipesUiState.recipes
 
     Box(
         modifier = Modifier,
@@ -66,75 +64,56 @@ fun RecipeBeanListScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 beans.forEach {
-                    val matchedRecipes = recipes.filter { recipe -> recipe.bean == it }
-                    if (matchedRecipes.isNotEmpty()) {
-                        item {
+                    item {
+                        Box(
+                            contentAlignment = Alignment.CenterStart,
+                            modifier = Modifier
+                                .fillMaxWidth(1f)
+                                .clickable(onClick = { onNavigateToRecipeList(it) })
+                                .border(
+                                    border = BorderStroke(1.dp, Black),
+                                    shape = RoundedCornerShape(8.dp)
+                                )
+                                .padding(10.dp),
+                        ) {
+                            Column() {
+                                Text(
+                                    text = it.bean.name ?: "",
+                                    style = Typography.titleMedium,
+                                    modifier = Modifier.padding(bottom = 6.dp)
+                                )
+                                Text(
+                                    text = "원산지 : ${it.getOriginInfo() ?: ""}",
+                                    style = Typography.bodySmall,
+                                )
+                                Text(
+                                    text = "로스터리 : ${it.roastery?.name ?: ""}",
+                                    style = Typography.bodySmall,
+                                )
+                                Text(
+                                    text = "배전도 : ${it.bean.roastDegree?.getName() ?: ""}",
+                                    style = Typography.bodySmall,
+                                )
+                            }
                             Box(
-                                contentAlignment = Alignment.CenterStart,
                                 modifier = Modifier
                                     .fillMaxWidth(1f)
-                                    .clickable(onClick = { onNavigateToRecipeList(it) })
-                                    .border(
-                                        border = BorderStroke(1.dp, Black),
-                                        shape = RoundedCornerShape(8.dp)
-                                    )
-                                    .padding(10.dp),
+                                    .padding(end = 10.dp),
+                                contentAlignment = Alignment.CenterEnd
                             ) {
-                                Column() {
-                                    Text(
-                                        text = it.bean.name ?: "",
-                                        style = Typography.titleMedium,
-                                        modifier = Modifier.padding(bottom = 6.dp)
-                                    )
-                                    Text(
-                                        text = "원산지 : ${it.getOriginInfo() ?: ""}",
-                                        style = Typography.bodySmall,
-                                    )
-                                    Text(
-                                        text = "로스터리 : ${it.roastery?.name ?: ""}",
-                                        style = Typography.bodySmall,
-                                    )
-                                    Text(
-                                        text = "배전도 : ${it.bean.roastDegree?.getName() ?: ""}",
-                                        style = Typography.bodySmall,
-                                    )
-                                }
-
-                                Box(
+                                Icon(
+                                    imageVector = Icons.Default.ArrowForward,
+                                    contentDescription = "",
                                     modifier = Modifier
-                                        .fillMaxWidth(1f)
-                                        .padding(end = 10.dp),
-                                    contentAlignment = Alignment.CenterEnd
-                                ) {
+                                        .size(30.dp)
+                                        .padding(0.dp)
+                                )
 
-                                    Icon(
-                                        imageVector = Icons.Default.ArrowForward,
-                                        contentDescription = "",
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(0.dp)
-                                    )
-
-                                }
                             }
-                            Spacer(Modifier.size(10.dp))
                         }
+                        Spacer(Modifier.size(10.dp))
                     }
                 }
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(0.95f)
-                .padding(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.End,
-        ) {
-            SmallFloatingActionButton(
-                onClick = onNavigateToSave,
-                containerColor = LightCoffee,
-            ) {
-                Text(text = "+", fontSize = 20.sp)
             }
         }
     }
@@ -148,14 +127,12 @@ fun RecipeListScreen(
 ) {
     Log.d("RecipeListScreen", "start")
 
-    val beans = recipesUiState.bean
     val recipes = recipesUiState.recipes
-    val matchedRecipes = recipes.filter { recipe -> recipe.bean == beans }
 
     Box(
         modifier = Modifier,
     ) {
-        if(matchedRecipes.isEmpty()) {
+        if(recipes.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -171,7 +148,7 @@ fun RecipeListScreen(
                     .padding(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                matchedRecipes.forEach {
+                recipes.forEachIndexed { idx, it ->
                     item {
                         Row(
                             modifier = Modifier

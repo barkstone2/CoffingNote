@@ -8,8 +8,8 @@ import com.note.coffee.data.entity.recipes.Recipe
 interface RecipeDao {
 
     @Transaction
-    @Query("SELECT * FROM recipe ORDER BY id DESC")
-    suspend fun getAll(): List<RecipeResponse>
+    @Query("SELECT * FROM recipe WHERE beanId = :beanId ORDER BY id DESC")
+    suspend fun getAllOfBean(beanId: Long): List<RecipeResponse>
 
     @Transaction
     @Query("select * from recipe where id = :id")

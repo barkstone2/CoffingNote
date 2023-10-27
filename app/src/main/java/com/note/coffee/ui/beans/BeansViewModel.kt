@@ -39,7 +39,6 @@ class BeansViewModel @Inject constructor(
     fun deleteBean(bean: Bean) {
         viewModelScope.launch(Dispatchers.IO) {
             beanRepository.delete(bean)
-            sharedData.loadRecipes()
             sharedData.loadBeans()
         }
     }
@@ -57,7 +56,6 @@ class BeansViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             beanRepository.update(bean)
             sharedData.loadBeans()
-            sharedData.loadRecipes()
         }
     }
 

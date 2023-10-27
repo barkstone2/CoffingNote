@@ -40,7 +40,6 @@ class HandMillsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             handMillRepository.delete(handMill)
             sharedData.loadHandMills()
-            sharedData.loadRecipes()
         }
     }
 
@@ -57,7 +56,6 @@ class HandMillsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             handMillRepository.update(handMill)
             sharedData.loadHandMills()
-            sharedData.loadRecipes()
         }
     }
 

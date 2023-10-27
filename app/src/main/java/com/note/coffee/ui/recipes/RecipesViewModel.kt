@@ -33,14 +33,14 @@ class RecipesViewModel @Inject constructor(
     fun saveRecipe(recipe: Recipe) {
         viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.insert(recipe)
-            sharedData.loadRecipes()
+            sharedData.loadRecipes(recipe.beanId!!)
         }
     }
 
     fun deleteRecipe(recipe: Recipe) {
         viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.delete(recipe)
-            sharedData.loadRecipes()
+            sharedData.loadRecipes(recipe.beanId!!)
         }
     }
 
@@ -56,13 +56,13 @@ class RecipesViewModel @Inject constructor(
     fun updateRecipe(recipe: Recipe) {
         viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.update(recipe)
-            sharedData.loadRecipes()
+            sharedData.loadRecipes(recipe.beanId!!)
         }
     }
 
-    fun selectRecipeBean(bean: BeanResponse?) {
-        _uiState.update {
-            it.copy(bean = bean)
+    fun selectRecipeBean(bean: BeanResponse) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedData.loadRecipes(bean.bean.id)
         }
     }
 
