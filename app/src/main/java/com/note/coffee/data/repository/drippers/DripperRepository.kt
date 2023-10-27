@@ -13,7 +13,10 @@ class DripperRepository @Inject constructor(
         return dripperDao.getAll()
     }
 
+    @Transaction
     suspend fun insert(dripper: Dripper) {
+        val nextOrderId = dripperDao.getNextOrderId()
+        dripper.orderId = nextOrderId
         dripperDao.insert(dripper)
     }
 

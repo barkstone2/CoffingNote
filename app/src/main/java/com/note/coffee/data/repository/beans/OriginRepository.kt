@@ -13,7 +13,10 @@ class OriginRepository @Inject constructor(
         return originDao.getAll()
     }
 
+    @Transaction
     suspend fun insert(origin: Origin) {
+        val nextOrderId = originDao.getNextOrderId()
+        origin.orderId = nextOrderId
         originDao.insert(origin)
     }
 

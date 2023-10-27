@@ -14,7 +14,10 @@ class BeanRepository @Inject constructor(
         return beanDao.getAll()
     }
 
+    @Transaction
     suspend fun insert(bean: Bean) {
+        val nextOrderId = beanDao.getNextOrderId()
+        bean.orderId = nextOrderId
         beanDao.insert(bean)
     }
 

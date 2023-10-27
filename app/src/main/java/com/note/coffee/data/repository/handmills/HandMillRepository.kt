@@ -13,7 +13,10 @@ class HandMillRepository @Inject constructor(
         return handMillDao.getAll()
     }
 
+    @Transaction
     suspend fun insert(handMill: HandMill) {
+        val nextOrderId = handMillDao.getNextOrderId()
+        handMill.orderId = nextOrderId
         handMillDao.insert(handMill)
     }
 

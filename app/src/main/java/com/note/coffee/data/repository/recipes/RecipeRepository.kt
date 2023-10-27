@@ -14,7 +14,10 @@ class RecipeRepository @Inject constructor(
         return recipeDao.getAllOfBean(beanId)
     }
 
+    @Transaction
     suspend fun insert(recipe: Recipe) {
+        val nextOrderId = recipeDao.getNextOrderId()
+        recipe.orderId = nextOrderId
         recipeDao.insert(recipe)
     }
 

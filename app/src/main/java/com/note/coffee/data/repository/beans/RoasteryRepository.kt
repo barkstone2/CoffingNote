@@ -13,7 +13,10 @@ class RoasteryRepository @Inject constructor(
         return roasteryDao.getAll()
     }
 
+    @Transaction
     suspend fun insert(roastery: Roastery) {
+        val nextOrderId = roasteryDao.getNextOrderId()
+        roastery.orderId = nextOrderId
         roasteryDao.insert(roastery)
     }
 

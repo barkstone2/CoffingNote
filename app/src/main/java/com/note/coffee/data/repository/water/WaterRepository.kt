@@ -13,7 +13,10 @@ class WaterRepository @Inject constructor(
         return waterDao.getAll()
     }
 
+    @Transaction
     suspend fun insert(water: Water) {
+        val nextOrderId = waterDao.getNextOrderId()
+        water.orderId = nextOrderId
         waterDao.insert(water)
     }
 
