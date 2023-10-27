@@ -2,9 +2,13 @@ package com.note.coffee.ui.recipes
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -13,10 +17,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,6 +40,7 @@ import com.note.coffee.ui.theme.Black
 import com.note.coffee.ui.theme.LightCoffee
 import com.note.coffee.ui.theme.Typography
 import com.note.coffee.ui.theme.White
+import kotlinx.coroutines.delay
 
 @Composable
 fun RecipeBeanListScreen(
@@ -57,6 +65,15 @@ fun RecipeBeanListScreen(
                 )
             }
         } else {
+            var reorderedId by remember { mutableStateOf(0L) }
+
+            LaunchedEffect(reorderedId) {
+                if(reorderedId != 0L) {
+                    delay(200)
+                    reorderedId = 0L
+                }
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -124,6 +141,7 @@ fun RecipeListScreen(
     recipesUiState: RecipesUiState,
     onNavigateToSave: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
+    onClickReorder: (Int, Int) -> Unit,
 ) {
     Log.d("RecipeListScreen", "start")
 
@@ -142,6 +160,15 @@ fun RecipeListScreen(
                 )
             }
         } else {
+            var reorderedId by remember { mutableStateOf(0L) }
+
+            LaunchedEffect(reorderedId) {
+                if(reorderedId != 0L) {
+                    delay(200)
+                    reorderedId = 0L
+                }
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -150,58 +177,104 @@ fun RecipeListScreen(
             ) {
                 recipes.forEachIndexed { idx, it ->
                     item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(1f)
-                                .clickable(onClick = { onNavigateToDetail(it.recipe.id) })
-                                .border(
-                                    border = BorderStroke(1.dp, Black),
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .padding(10.dp),
+                        val targetColor = if (it.recipe.id == reorderedId) Color.LightGray else Color.White
+                        val backgroundColor by animateColorAsState(
+                            targetColor,
+                            TweenSpec(500),
+                            label = "reorderAnimation"
+                        )
 
-                            ) {
-                            Column() {
-                                Text(
-                                    text = it.bean?.bean?.name ?: "",
-                                    style = Typography.titleMedium,
-                                    modifier = Modifier.padding(bottom = 6.dp)
-                                )
-                                Text(
-                                    text = "로스터리 : ${it.bean?.roastery?.name ?: ""}",
-                                    style = Typography.bodySmall,
-                                )
-                                Text(
-                                    text = "분쇄도 : ${it.recipe.grindingDegree ?: ""} 클릭",
-                                    style = Typography.bodySmall,
-                                )
-                                Text(
-                                    text = "물 온도 : ${it.recipe.temperature ?: ""}°C",
-                                    style = Typography.bodySmall,
-                                )
-                                Text(
-                                    text = "핸드밀 : ${it.handMill?.name ?: ""}",
-                                    style = Typography.bodySmall,
-                                )
-                                Text(
-                                    text = "드리퍼 : ${it.dripper?.name ?: ""}",
-                                    style = Typography.bodySmall,
-                                )
-                                Text(
-                                    text = "물 : ${it.water?.name ?: ""}",
-                                    style = Typography.bodySmall,
-                                )
-                                Text(
-                                    text = "비율 : [${it.recipe.getRatioText()}]",
-                                    style = Typography.bodySmall,
-                                )
-                                if (!it.recipe.comment.isNullOrEmpty()) {
+                        Box(modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .background(backgroundColor, shape = RoundedCornerShape(8.dp))) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(1f)
+                                    .clickable(onClick = { onNavigateToDetail(it.recipe.id) })
+                                    .border(
+                                        border = BorderStroke(1.dp, Black),
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .padding(10.dp),
+
+                                ) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.9f)
+                                ) {
                                     Text(
-                                        text = "- \"${it.recipe.comment}\"",
-                                        style = Typography.titleSmall,
+                                        text = it.bean?.bean?.name ?: "",
+                                        style = Typography.titleMedium,
+                                        modifier = Modifier.padding(bottom = 6.dp)
+                                    )
+                                    Text(
+                                        text = "로스터리 : ${it.bean?.roastery?.name ?: ""}",
+                                        style = Typography.bodySmall,
+                                    )
+                                    Text(
+                                        text = "분쇄도 : ${it.recipe.grindingDegree ?: ""} 클릭",
+                                        style = Typography.bodySmall,
+                                    )
+                                    Text(
+                                        text = "물 온도 : ${it.recipe.temperature ?: ""}°C",
+                                        style = Typography.bodySmall,
+                                    )
+                                    Text(
+                                        text = "핸드밀 : ${it.handMill?.name ?: ""}",
+                                        style = Typography.bodySmall,
+                                    )
+                                    Text(
+                                        text = "드리퍼 : ${it.dripper?.name ?: ""}",
+                                        style = Typography.bodySmall,
+                                    )
+                                    Text(
+                                        text = "물 : ${it.water?.name ?: ""}",
+                                        style = Typography.bodySmall,
+                                    )
+                                    Text(
+                                        text = "비율 : [${it.recipe.getRatioText()}]",
+                                        style = Typography.bodySmall,
+                                    )
+                                    if (!it.recipe.comment.isNullOrEmpty()) {
+                                        Text(
+                                            text = "- \"${it.recipe.comment}\"",
+                                            style = Typography.titleSmall,
+                                            modifier = Modifier
+                                                .fillMaxWidth(1f)
+                                                .padding(3.dp)
+                                        )
+                                    }
+                                }
+                                Column() {
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowUp,
+                                        contentDescription = "",
                                         modifier = Modifier
-                                            .fillMaxWidth(1f)
-                                            .padding(3.dp)
+                                            .size(30.dp)
+                                            .padding(0.dp)
+                                            .clickable(
+                                                onClick = {
+                                                    onClickReorder(idx, idx - 1)
+                                                    reorderedId = it.recipe.id
+                                                },
+                                                indication = null,
+                                                interactionSource = MutableInteractionSource()
+                                            )
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowDown,
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .padding(0.dp)
+                                            .clickable(
+                                                onClick = {
+                                                    onClickReorder(idx, idx+1)
+                                                    reorderedId = it.recipe.id
+                                                },
+                                                indication = null,
+                                                interactionSource = MutableInteractionSource()
+                                            )
                                     )
                                 }
                             }

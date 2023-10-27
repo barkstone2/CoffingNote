@@ -382,6 +382,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         recipesViewModel.getRecipe(it)
                         navController.navigate(CoffingNoteScreen.RecipeDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        recipesViewModel.reorderRecipe(idx, otherIdx)
                     }
                 )
             }
@@ -441,6 +444,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         beansViewModel.getBean(it)
                         navController.navigate(CoffingNoteScreen.BeanDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        beansViewModel.reorderBean(idx, otherIdx)
                     }
                 )
             }
@@ -488,6 +494,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         handMillsViewModel.getHandMill(it)
                         navController.navigate(CoffingNoteScreen.HandMillDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        handMillsViewModel.reorderHandMill(idx, otherIdx)
                     }
                 )
             }
@@ -531,6 +540,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         drippersViewModel.getDripper(it)
                         navController.navigate(CoffingNoteScreen.DripperDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        drippersViewModel.reorderDripper(idx, otherIdx)
                     }
                 )
             }
@@ -573,6 +585,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         originViewModel.getOrigin(it)
                         navController.navigate(CoffingNoteScreen.OriginDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        originViewModel.reorderOrigin(idx, otherIdx)
                     }
                 )
             }
@@ -621,6 +636,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         roasteryViewModel.getRoastery(it)
                         navController.navigate(CoffingNoteScreen.RoasteryDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        roasteryViewModel.reorderRoastery(idx, otherIdx)
                     }
                 )
             }
@@ -670,6 +688,9 @@ fun CoffingNoteApp(
                     onNavigateToDetail = {
                         waterViewModel.getWater(it)
                         navController.navigate(CoffingNoteScreen.WaterDetail.name)
+                    },
+                    onClickReorder = { idx, otherIdx ->
+                        waterViewModel.reorderWater(idx, otherIdx)
                     }
                 )
             }

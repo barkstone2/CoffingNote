@@ -1,7 +1,10 @@
 package com.note.coffee.ui.beans
 
 import android.util.Log
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -10,10 +13,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,6 +35,7 @@ import com.note.coffee.ui.common.OutlinedText
 import com.note.coffee.ui.theme.Black
 import com.note.coffee.ui.theme.LightCoffee
 import com.note.coffee.ui.theme.Typography
+import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -37,6 +44,7 @@ fun BeanListScreen(
     beansUiState: BeansUiState,
     onNavigateToSave: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
+    onClickReorder: (Int, Int) -> Unit,
 ) {
     Log.d("BeanListScreen", "start")
 
@@ -54,89 +62,143 @@ fun BeanListScreen(
                 )
             }
         } else {
+
+            var reorderedId by remember { mutableStateOf(0L) }
+
+            LaunchedEffect(reorderedId) {
+                if(reorderedId != 0L) {
+                    delay(200)
+                    reorderedId = 0L
+                }
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                beansUiState.beans.forEach {
+                beansUiState.beans.forEachIndexed { idx, it ->
                     item {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(1f)
-                                .clickable(onClick = { onNavigateToDetail(it.bean.id) })
-                                .border(
-                                    border = BorderStroke(1.dp, Black),
-                                    shape = RoundedCornerShape(8.dp)
-                                )
-                                .padding(10.dp),
+                        val targetColor = if (it.bean.id == reorderedId) Color.LightGray else Color.White
+                        val backgroundColor by animateColorAsState(
+                            targetColor,
+                            TweenSpec(500),
+                            label = "reorderAnimation"
+                        )
 
-                        ) {
-                            Column() {
-                                Row(
+                        Box(modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .background(backgroundColor, shape = RoundedCornerShape(8.dp))) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(1f)
+                                    .clickable(onClick = { onNavigateToDetail(it.bean.id) })
+                                    .border(
+                                        border = BorderStroke(1.dp, Black),
+                                        shape = RoundedCornerShape(8.dp)
+                                    )
+                                    .padding(10.dp),
+                            ) {
+                                Column(
                                     modifier = Modifier
-                                        .fillMaxWidth(1f)
-                                        .padding(bottom = 6.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+                                    .fillMaxWidth(0.9f)
                                 ) {
-                                    Text(
-                                        text = it.bean.name ?: "",
-                                        style = Typography.titleMedium,
-                                        modifier = Modifier.fillMaxWidth(0.5f)
-                                    )
-                                    Text(
-                                        text = it.roastery?.name ?: "",
-                                        style = Typography.bodySmall,
-                                    )
-                                }
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth(1f),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = it.getOriginInfo() ?: "",
-                                        style = Typography.bodySmall,
-                                        modifier = Modifier.fillMaxWidth(0.5f)
-                                    )
-                                    Text(
-                                        text = it.bean.roastDegree?.getName() ?: "",
-                                        style = Typography.bodySmall,
-                                    )
-                                }
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(1f)
+                                            .padding(bottom = 6.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = it.bean.name ?: "",
+                                            style = Typography.titleMedium,
+                                            modifier = Modifier.fillMaxWidth(0.5f)
+                                        )
+                                        Text(
+                                            text = it.roastery?.name ?: "",
+                                            style = Typography.bodySmall,
+                                        )
+                                    }
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth(1f),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = it.getOriginInfo() ?: "",
+                                            style = Typography.bodySmall,
+                                            modifier = Modifier.fillMaxWidth(0.5f)
+                                        )
+                                        Text(
+                                            text = it.bean.roastDegree?.getName() ?: "",
+                                            style = Typography.bodySmall,
+                                        )
+                                    }
 
-                                if(it.bean.cuppingNotes.isNotEmpty()) {
-                                    FlowRow() {
-                                        it.bean.cuppingNotes.forEach {
-                                            Box(
-                                                modifier = Modifier
-                                                    .padding(1.dp)
-                                                    .border(
-                                                        border = BorderStroke(1.dp, Black),
-                                                        shape = RoundedCornerShape(10.dp)
+                                    if (it.bean.cuppingNotes.isNotEmpty()) {
+                                        FlowRow() {
+                                            it.bean.cuppingNotes.forEach {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .padding(1.dp)
+                                                        .border(
+                                                            border = BorderStroke(1.dp, Black),
+                                                            shape = RoundedCornerShape(10.dp)
+                                                        )
+                                                ) {
+                                                    Text(
+                                                        text = it,
+                                                        style = Typography.bodySmall,
+                                                        modifier = Modifier.padding(3.dp)
                                                     )
-                                            ) {
-                                                Text(
-                                                    text = it,
-                                                    style = Typography.bodySmall,
-                                                    modifier = Modifier.padding(3.dp)
-                                                )
+                                                }
                                             }
                                         }
                                     }
+                                    if (!it.bean.comment.isNullOrEmpty()) {
+                                        Text(
+                                            text = "- \"${it.bean.comment}\"",
+                                            style = Typography.titleSmall,
+                                            modifier = Modifier
+                                                .fillMaxWidth(1f)
+                                                .padding(3.dp)
+                                        )
+                                    }
                                 }
-                                if(!it.bean.comment.isNullOrEmpty()) {
-                                    Text(
-                                        text = "- \"${it.bean.comment}\"",
-                                        style = Typography.titleSmall,
+                                Column() {
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowUp,
+                                        contentDescription = "",
                                         modifier = Modifier
-                                            .fillMaxWidth(1f)
-                                            .padding(3.dp)
+                                            .size(30.dp)
+                                            .padding(0.dp)
+                                            .clickable(
+                                                onClick = {
+                                                    onClickReorder(idx, idx - 1)
+                                                    reorderedId = it.bean.id
+                                                },
+                                                indication = null,
+                                                interactionSource = MutableInteractionSource()
+                                            )
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowDown,
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .padding(0.dp)
+                                            .clickable(
+                                                onClick = {
+                                                    onClickReorder(idx, idx + 1)
+                                                    reorderedId = it.bean.id
+                                                },
+                                                indication = null,
+                                                interactionSource = MutableInteractionSource()
+                                            )
                                     )
                                 }
                             }
-
                         }
                         Spacer(Modifier.size(10.dp))
                     }
