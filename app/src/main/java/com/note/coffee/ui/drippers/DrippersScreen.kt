@@ -31,6 +31,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.note.coffee.data.dto.drippers.DripperRequest
 import com.note.coffee.data.entity.drippers.Dripper
 import com.note.coffee.ui.common.OutlinedText
+import com.note.coffee.ui.common.ReorderButtonColumn
 import com.note.coffee.ui.theme.Black
 import com.note.coffee.ui.theme.LightCoffee
 import com.note.coffee.ui.theme.Typography
@@ -96,7 +97,8 @@ fun DripperListScreen(
                                         shape = RoundedCornerShape(8.dp)
                                     )
                                     .padding(10.dp),
-                                ) {
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth(0.9f)
@@ -122,38 +124,17 @@ fun DripperListScreen(
                                         )
                                     }
                                 }
-                                Column() {
-                                    Icon(
-                                        imageVector = Icons.Default.KeyboardArrowUp,
-                                        contentDescription = "",
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(0.dp)
-                                            .clickable(
-                                                onClick = {
-                                                    onClickReorder(idx, idx - 1)
-                                                    reorderedId = it.id
-                                                },
-                                                indication = null,
-                                                interactionSource = MutableInteractionSource()
-                                            )
-                                    )
-                                    Icon(
-                                        imageVector = Icons.Default.KeyboardArrowDown,
-                                        contentDescription = "",
-                                        modifier = Modifier
-                                            .size(30.dp)
-                                            .padding(0.dp)
-                                            .clickable(
-                                                onClick = {
-                                                    onClickReorder(idx, idx + 1)
-                                                    reorderedId = it.id
-                                                },
-                                                indication = null,
-                                                interactionSource = MutableInteractionSource()
-                                            )
-                                    )
-                                }
+                                ReorderButtonColumn(
+                                    onClickPrev = {
+                                        onClickReorder(idx, idx - 1)
+                                        reorderedId = it.id
+                                    },
+                                    onClickNext = {
+                                        onClickReorder(idx, idx + 1)
+                                        reorderedId = it.id
+                                    },
+                                    betweenSpacerHeight = 5,
+                                )
                             }
                         }
                         Spacer(Modifier.size(10.dp))

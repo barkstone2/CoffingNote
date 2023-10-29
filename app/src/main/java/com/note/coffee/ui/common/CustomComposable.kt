@@ -4,8 +4,13 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -123,6 +128,48 @@ fun OutlinedText(
         ) {
             value()
         }
+    }
+}
+
+@Composable
+fun ReorderButtonColumn(
+    modifier: Modifier = Modifier,
+    onClickPrev: () -> Unit,
+    onClickNext: () -> Unit,
+    iconSize: Int = 30,
+    iconPadding: Int = 0,
+    betweenSpacerHeight: Int = 0,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowUp,
+            contentDescription = "",
+            modifier = Modifier
+                .size(iconSize.dp)
+                .padding(iconPadding.dp)
+                .clickable(
+                    onClick = onClickPrev,
+                    indication = null,
+                    interactionSource = MutableInteractionSource()
+                )
+        )
+
+        Spacer(modifier = Modifier.height(betweenSpacerHeight.dp))
+
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowDown,
+            contentDescription = "",
+            modifier = Modifier
+                .size(iconSize.dp)
+                .padding(iconPadding.dp)
+                .clickable(
+                    onClick = onClickNext,
+                    indication = null,
+                    interactionSource = MutableInteractionSource()
+                )
+        )
     }
 }
 
